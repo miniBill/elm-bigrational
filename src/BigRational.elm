@@ -247,7 +247,12 @@ mul (BigRational n1 d1) (BigRational n2 d2) =
 -}
 div : BigRational -> BigRational -> BigRational
 div (BigRational n1 d1) (BigRational n2 d2) =
-    fromBigInts (BigInt.mul n1 d2) (BigInt.mul d1 n2)
+    if d1 == zeroInt && BigInt.lt n2 zeroInt then
+        -- If d1 is zero we lose the sign of n2, so we need to manually negate
+        fromBigInts (BigInt.negate (BigInt.mul n1 d2)) zeroInt
+
+    else
+        fromBigInts (BigInt.mul n1 d2) (BigInt.mul d1 n2)
 
 
 {-| Raise a big rational to the power of an integer.
