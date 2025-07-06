@@ -80,6 +80,7 @@ fromBigInts n d =
     let
         gcd_ =
             gcd n d
+                |> BigInt.abs
 
         a =
             BigInt.div n gcd_
