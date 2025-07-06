@@ -265,6 +265,9 @@ pow p x =
         if p < 0 then
             BigRational oneInt zeroInt
 
+        else if p == 0 then
+            BigRational oneInt oneInt
+
         else
             zero
 
