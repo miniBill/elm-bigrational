@@ -104,9 +104,20 @@ fromBigInts n d =
 -}
 fromFloat : Float -> BigRational
 fromFloat f =
-    String.fromFloat f
-        |> fromFloatString
-        |> Maybe.withDefault zero
+    if Basics.isNaN f then
+        fromInts 0 0
+
+    else if Basics.isInfinite f then
+        if f > 0 then
+            fromInts 1 0
+
+        else
+            fromInts -1 0
+
+    else
+        String.fromFloat f
+            |> fromFloatString
+            |> Maybe.withDefault zero
 
 
 {-| Try to make a rational from a string. The string can in the format
@@ -154,7 +165,10 @@ fromString s =
 -}
 fromFloatString : String -> Maybe BigRational
 fromFloatString s =
-    if s == "Infinity" then
+    if s == "-Infinity" then
+        Just (fromInts -1 0)
+
+    else if s == "Infinity" then
         Just (fromInts 1 0)
 
     else if s == "NaN" then
